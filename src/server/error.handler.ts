@@ -6,6 +6,7 @@ export const handleError = (req: Request, res: Response, err, done) => {
       message: err.message
     }
   }
+  const messages: any[] = []
 
   switch (err.name) {
     case 'MongoError':
@@ -13,6 +14,12 @@ export const handleError = (req: Request, res: Response, err, done) => {
       break
     case 'ValidationError':
       err.statusCode = 400
+      for (const name in err.errors) {
+        messages.push({ messages: err.errors[name].message })
+      }
+      err.toJSON = () => ({
+        errors: messages
+      })
       break
   }
 
