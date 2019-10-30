@@ -9,6 +9,8 @@
     "build": "sucrase ./src -d ./dist --transforms typescript,imports"
   },
   "dependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "bcrypt": "^3.0.6",
     "mongoose": "^5.7.6",
     "restify": "^8.4.0",
     "restify-errors": "^8.0.1"

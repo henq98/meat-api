@@ -27,8 +27,7 @@ class UsersRouter extends Router {
     })
 
     application.post('/users', (req, res, next) => {
-      const { name, email, password } = req.body
-      const user = new User({ name, email, password })
+      const user = new User(req.body)
 
       user.save()
         .then(this.render(res, next))
@@ -38,10 +37,11 @@ class UsersRouter extends Router {
     application.put('/users/:id', (req, res, next) => {
       const { id } = req.params
 
-      User.updateOne({ _id: id }, req.body)
-        .exec()
+      const options = { new: true, runValidators: true }
+
+      User.findByIdAndUpdate({ _id: id }, req.body, options)
         .then(result => {
-          if (result.n) {
+          if (result) {
             return User.findById(id)
           } else {
             throw new NotFoundError('Documento não encontrado')
@@ -51,10 +51,9 @@ class UsersRouter extends Router {
     })
 
     application.del('/users/:id', (req, res, next) => {
-      User.deleteOne({ _id: req.params.id })
-        .exec()
+      User.findByIdAndRemove({ _id: req.params.id })
         .then(result => {
-          if (result.deletedCount) {
+          if (result) {
             res.send(204)
           } else {
             throw new NotFoundError('Documento não encontrado')
