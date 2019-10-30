@@ -12,7 +12,6 @@ class UsersRouter extends Router {
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   applyRoutes (application: restify.Server) {
     application.get('/users', (req, res, next) => {
       User.find()
@@ -42,7 +41,7 @@ class UsersRouter extends Router {
       User.findByIdAndUpdate({ _id: id }, req.body, options)
         .then(result => {
           if (result) {
-            return User.findById(id)
+            return result
           } else {
             throw new NotFoundError('Documento não encontrado')
           }
